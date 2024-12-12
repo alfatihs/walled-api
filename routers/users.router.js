@@ -5,7 +5,7 @@ const userController = require ('../controllers/users.controller');
 
 router.post('/users', userController.createUser);
 router.get('/users', userController.getUsers);
-router.post('/login', userController.authenticate);
+router.post('/login', userController.login); //kenapa ini ga pakai rest api convention
 
 module.exports = router;
 

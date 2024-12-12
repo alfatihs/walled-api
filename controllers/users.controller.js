@@ -7,6 +7,11 @@ const registerSchema = Joi.object({
     password: Joi.string().required()
 });
 
+const loginSchema = Joi.object({
+    email : Joi.string().email().required(),
+    password: Joi.string().required()
+});
+
 const Pool = require('pg').Pool
 const pool = new Pool({
     user: 'postgres',
@@ -49,6 +54,25 @@ const getUserById = async (req, res) => {
     }
 }
 
+const login = async (req, res) => {
+    try{
+        const {error, value} = loginSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({error : error.message});
+        }
+        const token = await userService.login(value);
+        res.status(200).json({ data : {token : token}});
+    } catch (error){
+        if(error.message === "404"){
+            return res.status(404).json({error : "user doesnt exist"});
+        }
+        if(error.message === "401"){
+            return res.status(401).json({error : "email or password not valid"})
+        }
+            
+    }
+}
+
 const authenticate = (req, res) => {
     const { email, password } = req.body;
     pool.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password], (error, results) => {
@@ -67,4 +91,4 @@ const authenticate = (req, res) => {
 
 
 
-module.exports = {createUser, getUsers, authenticate, getUserById};
+module.exports = {createUser, getUsers, authenticate, login,  getUserById};
