@@ -1,7 +1,5 @@
-//DTO for user response
-const { use } = require("react");
 
-class userResponse{
+class UserResponse{
     constructor(user){
         this.id = user.id;
         this.name = user.name;
@@ -11,4 +9,4 @@ class userResponse{
     }
 }
 
-module.exports = {userResponse};
+module.exports = {UserResponse};

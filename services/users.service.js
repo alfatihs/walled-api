@@ -19,7 +19,7 @@ const createUser = async (userData) => {
 const getUserById = async (id) => {
     const user = await userRepository.getUserById(id);
     if(!user){
-        throw new Error("User not found");
+        throw new Error("user not found");
     }
     return user;
 }
@@ -35,7 +35,7 @@ const login = async(user) => {
         throw new Error(401);
     }
 
-    const token = generateAccessToken({email: email});
+    const token = generateAccessToken({email: email, id: validUser.rows[0].id});
     return token;    
 }
 
