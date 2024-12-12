@@ -13,15 +13,6 @@ app.use(
     extended: true,
   })
 )
-// const transactions = [
-//     {
-//         type : "DEBIT",
-//         fromTo: "100098",
-//         description: "ini description",
-//         amount: 1000000,
-//         date: "2021-08-01"
-//     }
-// ]
 
 const schema = Joi.object({
     a : Joi.string()
@@ -42,14 +33,6 @@ const pool = new Pool({
     port: 5432,
 })
 
-// const getMovies = (req, res) => {
-//     pool.query('SELECT * FROM movies', (error, results) => {
-//         if (error) {
-//             throw error
-//         }
-//         res.status(200).json(results.rows)
-//     })
-// }
 const routeHandler = (req, res) => {
     const {error, value} = schema.validate(req.body);
     if (error) {
@@ -58,20 +41,6 @@ const routeHandler = (req, res) => {
     }
     res.status(200).json({data : transactions});
 }
-
-// const createMovie = (req, res) => {
-//     console.log(req.body, "Request body");
-//     const { movie_title, movie_genre, duration} = req.body
-//     pool.query("INSERT INTO movies (movie_title, movie_genre, duration) VALUES ($1, $2, $3) RETURNING *", [movie_title, movie_genre, duration],
-//         (error, results) => {
-//         if (error) {
-//             throw error
-//         }
-//         res.status(201).json(results.rows[0])
-//     }
-//     )
-
-// }
 
 const imgExample = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png';
 const createUser = (req, res) => {
@@ -116,14 +85,19 @@ const authenticate = (req, res) => {
     })
 }
 
+const getTransactions = (req, res) => {
+    pool.query('SELECT * FROM transactions', (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json(results.rows)
+    })
+}
 
-// app.get('/movies', getMovies);
-// app.get('/', routeHandler);
-// app.post('/movies', createMovie);
-// app.post('/users', createUser);
 app.post('/login', authenticate);
 app.get('/users', getUsers);
 app.post('/users', createUser);
+app.get('/transactions', getTransactions);
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
