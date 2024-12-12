@@ -7,13 +7,21 @@ const registerSchema = Joi.object({
     password: Joi.string().required()
 });
 
-const createUser = (req, res) => {
+const Pool = require('pg').Pool
+const pool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'walled_db',
+    password: 'password',
+    port: 5432,
+})
+
+const createUser = async (req, res) => {
     // console.log(req.body, "Request body");
     try{
         const {error, value} = registerSchema.validate(req.body);
         if (error) {
-            res.status(400).json({error : error.details[0].message});
-            return;
+            return res.status(400).json({error : error.details[0].message});
         }
         const user = await userService.createUser(value);
         res.status(201).json({ data : user});
@@ -29,6 +37,16 @@ const getUsers = (req, res) => {
         }
         res.status(200).json(results.rows)
     })
+}
+
+const getUserById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await userService.getUserById(id);
+        res.status(200).json({data : user});
+    } catch (error) {
+        res.status(error.statusCode || 500).json({error : error.message});
+    }
 }
 
 const authenticate = (req, res) => {
@@ -49,4 +67,4 @@ const authenticate = (req, res) => {
 
 
 
-module.exports = {createUser, getUsers, authenticate};
+module.exports = {createUser, getUsers, authenticate, getUserById};
