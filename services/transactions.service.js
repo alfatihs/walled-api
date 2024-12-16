@@ -6,6 +6,7 @@ const getTransactionById = async (id) => {
     if(!transaction){
         throw new Error("transaction not found");
     }
+    // console.log('repository', transaction);
     return transaction;
 }
 
