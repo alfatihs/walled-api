@@ -5,7 +5,8 @@ class UserResponse{
         this.name = user.name;
         this.email = user.email;
         this.imgurl = user.imgurl;
-        this.balance = user.balance
+        this.balance = user.balance;
+        this.noaccount = user.noaccount;
     }
 }
 

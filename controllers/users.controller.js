@@ -37,7 +37,7 @@ const createUser = async (req, res) => {
 }
 
 const getUsers = (req, res) => {
-    pool.query('SELECT (id, name, email, imgurl, balance) FROM users', (error, results) => {
+    pool.query('SELECT (id, name, email, imgurl, balance, noaccount) FROM users', (error, results) => {
         if (error) {
             throw error
         }
