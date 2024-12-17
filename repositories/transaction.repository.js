@@ -12,4 +12,15 @@ const getTransactionById = async (id) => {
   }
 }
 
-module.exports = { getTransactionById };
+const topup = async(id, amount, description) => {
+  try{ //masih harus diperiksa lagi
+    const result = await pool.query("INSERT INTO transactions (user_id, amount, description) VALUES ($1, $2, $3) RETURNING *", [id, amount, description]);
+    return result.rows[0];
+
+  }catch(error){
+    console.log("error", error)
+    throw new Error("transaction cannot be processed");
+  }
+}
+
+module.exports = { getTransactionById, topup };
