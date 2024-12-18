@@ -20,7 +20,7 @@ const topup = async (req, res) => {
     const {id} = req.user;
     const {amount, description} = req.body;
     try { 
-        const transaction = await transactionService.topup(Number(id), amount, description);
+        const transaction = await transactionService.topup(Number(id), Number(amount), description);
         res.json({data : new TransactionResponse(transaction)});
 
     }catch(err){
@@ -31,4 +31,18 @@ const topup = async (req, res) => {
     }
 }
 
-module.exports = { getTransactionById, topup };
+const transfer = async (req, res) => {
+    const {id} = req.user;
+    const {amount, description, to} = req.body;
+    try{
+        const transaction = await transactionService.transfer(Number(id), Number(amount), description, Number(to));
+        res.json({data : new TransactionResponse(transaction)});
+    }catch(err){
+        if(err.message === "transaction cannot be processed"){
+            return res.status(400).json({error : err.message});
+        }
+        res.status(err.statusCode || 500).json({error : err.message});
+    }
+}
+
+module.exports = { getTransactionById, topup, transfer };

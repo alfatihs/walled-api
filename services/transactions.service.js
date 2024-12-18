@@ -10,13 +10,21 @@ const getTransactionById = async (id) => {
     return transaction;
 }
 
-const topup = async (id, amount, description) => {
 
-    const transaction = await transactionRepository.topup(id,amount,description);
+const topup = async (id, amount, description) => {
+    const transaction = await transactionRepository.topup(id, amount, description);
     if(!transaction){
         throw new Error("transaction cannot be processed");
     }
     return transaction;
 }
 
-module.exports = { getTransactionById, topup };
+const transfer = async (id, amount, description, to) => {
+    const transaction = await transactionRepository.transfer(id, amount, description, to);
+    if(!transaction){
+        throw new Error("transaction cannot be processed");
+    }
+    return transaction;
+}
+
+module.exports = { getTransactionById, topup, transfer };
